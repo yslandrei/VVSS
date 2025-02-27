@@ -39,28 +39,24 @@ public class InventoryRepository {
         }
     }
 
-	public void readParts(){
-		//ClassLoader classLoader = InventoryRepository.class.getClassLoader();
-		File file = new File(filename);
-		ObservableList<Part> listP = FXCollections.observableArrayList();
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(file));
-			String line = null;
-			while((line=br.readLine())!=null){
-				Part part=getPartFromString(line);
-				if (part!=null)
-					listP.add(part);
-			}
-			br.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		this.allParts = listP;
-	}
+    public void readParts() {
+        File file = new File(filename);
+        ObservableList<Part> listP = FXCollections.observableArrayList();
 
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                Part part = getPartFromString(line);
+                if (part != null) {
+                    listP.add(part);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        this.allParts = listP;
+    }
 	private Part getPartFromString(String line){
 		Part item=null;
 		if (line==null|| line.equals("")) return null;
@@ -91,28 +87,24 @@ public class InventoryRepository {
 		return item;
 	}
 
-	public void readProducts(){
-		//ClassLoader classLoader = InventoryRepository.class.getClassLoader();
-		File file = new File(filename);
+    public void readProducts() {
+        File file = new File(filename);
+        ObservableList<Product> listP = FXCollections.observableArrayList();
 
-		ObservableList<Product> listP = FXCollections.observableArrayList();
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(file));
-			String line = null;
-			while((line=br.readLine())!=null){
-				Product product=getProductFromString(line);
-				if (product!=null)
-					listP.add(product);
-			}
-			br.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                Product product = getProductFromString(line);
+                if (product != null) {
+                    listP.add(product);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         this.products = listP;
-	}
+    }
 
 	private Product getProductFromString(String line){
 		Product product=null;
@@ -143,41 +135,36 @@ public class InventoryRepository {
 		return product;
 	}
 
-	public void writeAll() {
+    public void writeAll() {
+        File file = new File(filename);
+        ObservableList<Part> parts = this.getAllParts();
+        ObservableList<Product> products = this.getAllProducts();
 
-		//ClassLoader classLoader = InventoryRepository.class.getClassLoader();
-		File file = new File(filename);
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            for (Part p : parts) {
+                System.out.println(p.toString());
+                bw.write(p.toString());
+                bw.newLine();
+            }
 
-		BufferedWriter bw = null;
-		ObservableList<Part> parts=this.getAllParts();
-		ObservableList<Product> products=this.getAllProducts();
+            for (Product pr : products) {
+                StringBuilder line = new StringBuilder(pr.toString()).append(",");
 
-		try {
-			bw = new BufferedWriter(new FileWriter(file));
-			for (Part p:parts) {
-				System.out.println(p.toString());
-				bw.write(p.toString());
-				bw.newLine();
-			}
+                ObservableList<Part> list = pr.getAssociatedParts();
+                for (int i = 0; i < list.size(); i++) {
+                    line.append(list.get(i).getPartId());
+                    if (i < list.size() - 1) {
+                        line.append(":");
+                    }
+                }
 
-			for (Product pr:products) {
-				String line=pr.toString()+",";
-				ObservableList<Part> list= pr.getAssociatedParts();
-				int index=0;
-				while(index<list.size()-1){
-					line=line+list.get(index).getPartId()+":";
-					index++;
-				}
-				if (index==list.size()-1)
-					line=line+list.get(index).getPartId();
-				bw.write(line);
-				bw.newLine();
-			}
-			bw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+                bw.write(line.toString());
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Add new part to observable list allParts
