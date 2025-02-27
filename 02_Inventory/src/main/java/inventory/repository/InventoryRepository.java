@@ -262,7 +262,12 @@ public class InventoryRepository {
 	}
 
 	public void updatePart(int partIndex, Part part){
-        allParts.set(partIndex, part);
+        Part partToModify = allParts.get(partIndex);
+        partToModify.setName(part.getName());
+        partToModify.setPrice(part.getPrice());
+        partToModify.setInStock(part.getInStock());
+        partToModify.setMin(part.getMin());
+        partToModify.setMax(part.getMax());
 		writeAll();
 	}
 
@@ -273,6 +278,9 @@ public class InventoryRepository {
 
 	public void deletePart(Part part){
         allParts.remove(part);
+        for (Product product : products) {
+            product.getAssociatedParts().remove(part);
+        }
 		writeAll();
 	}
 	public void deleteProduct(Product product){
