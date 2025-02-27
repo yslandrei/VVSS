@@ -21,9 +21,23 @@ public class InventoryRepository {
         this.allParts= FXCollections.observableArrayList();
         this.autoProductId=0;
         this.autoPartId=0;
+        createFileIfItDoesntExist();
 		readParts();
 		readProducts();
 	}
+
+    private void createFileIfItDoesntExist()
+    {
+        File file = new File(filename);
+
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 	public void readParts(){
 		//ClassLoader classLoader = InventoryRepository.class.getClassLoader();
