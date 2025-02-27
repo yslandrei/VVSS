@@ -16,5 +16,20 @@
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="artifactory-snapshots" />
+      <option name="name" value="maven-snapshots" />
+      <option name="url" value="https://artifactory.porscheinformatik.com/artifactory/maven-snapshots" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="https://artifactory.porscheinformatik.com/artifactory/maven-releases" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="artifactory.porscheinformatik.com-releases" />
+      <option name="name" value="maven-releases" />
+      <option name="url" value="https://artifactory.porscheinformatik.com/artifactory/maven-releases" />
+    </remote-repository>
   </component>
 </project>

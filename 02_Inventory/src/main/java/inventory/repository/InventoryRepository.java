@@ -10,9 +10,17 @@ import java.util.StringTokenizer;
 public class InventoryRepository {
 
 	private static String filename = "data/items.txt";
-	private Inventory inventory;
+
+    private ObservableList<Product> products;
+    private ObservableList<Part> allParts;
+    private int autoPartId;
+    private int autoProductId;
+
 	public InventoryRepository(){
-		this.inventory=new Inventory();
+        this.products = FXCollections.observableArrayList();
+        this.allParts= FXCollections.observableArrayList();
+        this.autoProductId=0;
+        this.autoPartId=0;
 		readParts();
 		readProducts();
 	}
@@ -36,7 +44,7 @@ public class InventoryRepository {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		inventory.setAllParts(listP);
+		this.allParts = listP;
 	}
 
 	private Part getPartFromString(String line){
@@ -46,7 +54,7 @@ public class InventoryRepository {
 		String type=st.nextToken();
 		if (type.equals("I")) {
 			int id= Integer.parseInt(st.nextToken());
-			inventory.setAutoPartId(id);
+			this.setAutoPartId(id);
 			String name= st.nextToken();
 			double price = Double.parseDouble(st.nextToken());
 			int inStock = Integer.parseInt(st.nextToken());
@@ -57,7 +65,7 @@ public class InventoryRepository {
 		}
 		if (type.equals("O")) {
 			int id= Integer.parseInt(st.nextToken());
-			inventory.setAutoPartId(id);
+			this.autoPartId = id;
 			String name= st.nextToken();
 			double price = Double.parseDouble(st.nextToken());
 			int inStock = Integer.parseInt(st.nextToken());
@@ -89,7 +97,7 @@ public class InventoryRepository {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		inventory.setProducts(listP);
+        this.products = listP;
 	}
 
 	private Product getProductFromString(String line){
@@ -99,7 +107,7 @@ public class InventoryRepository {
 		String type=st.nextToken();
 		if (type.equals("P")) {
 			int id= Integer.parseInt(st.nextToken());
-			inventory.setAutoProductId(id);
+			this.setAutoProductId(id);
 			String name= st.nextToken();
 			double price = Double.parseDouble(st.nextToken());
 			int inStock = Integer.parseInt(st.nextToken());
@@ -111,7 +119,7 @@ public class InventoryRepository {
 			ObservableList<Part> list= FXCollections.observableArrayList();
 			while (ids.hasMoreTokens()) {
 				String idP = ids.nextToken();
-				Part part = inventory.lookupPart(idP);
+				Part part = this.lookupPart(idP);
 				if (part != null)
 					list.add(part);
 			}
@@ -127,8 +135,8 @@ public class InventoryRepository {
 		File file = new File(filename);
 
 		BufferedWriter bw = null;
-		ObservableList<Part> parts=inventory.getAllParts();
-		ObservableList<Product> products=inventory.getProducts();
+		ObservableList<Part> parts=this.getAllParts();
+		ObservableList<Product> products=this.getAllProducts();
 
 		try {
 			bw = new BufferedWriter(new FileWriter(file));
@@ -157,64 +165,104 @@ public class InventoryRepository {
 		}
 	}
 
-	public void addPart(Part part){
-		inventory.addPart(part);
-		writeAll();
-	}
+    /**
+     * Add new part to observable list allParts
+     * @param part
+     */
+    public void addPart(Part part) {
+        allParts.add(part);
+        writeAll();
+    }
 
-	public void addProduct(Product product){
-		inventory.addProduct(product);
-		writeAll();
-	}
+    /**
+     * Add new product to observable list products
+     * @param product
+     */
+    public void addProduct(Product product) {
+        products.add(product);
+        writeAll();
+    }
 
-	public int getAutoPartId(){
-		return inventory.getAutoPartId();
-	}
+    /**
+     * Method for incrementing part ID to be used to automatically
+     * assign ID numbers to parts
+     * @return
+     */
+    public int getAutoPartId() {
+        autoPartId++;
+        return autoPartId;
+    }
 
-	public int getAutoProductId(){
-		return inventory.getAutoProductId();
-	}
+    /**
+     * Method for incrementing product ID to be used to automatically
+     * assign ID numbers to products
+     * @return
+     */
+    public int getAutoProductId() {
+        autoProductId++;
+        return autoProductId;
+    }
 
-	public ObservableList<Part> getAllParts(){
-		return inventory.getAllParts();
-	}
+    public void setAutoPartId(int id){
+        autoPartId=id;
+    }
 
-	public ObservableList<Product> getAllProducts(){
-		return inventory.getProducts();
-	}
+    public void setAutoProductId(int id){
+        autoProductId=id;
+    }
+
+    /**
+     * Getter for allParts Observable List
+     * @return
+     */
+    public ObservableList<Part> getAllParts() {
+        return allParts;
+    }
+
+    /**
+     * Getter for Product Observable List
+     * @return
+     */
+    public ObservableList<Product> getAllProducts() {
+        return products;
+    }
 
 	public Part lookupPart (String search){
-		return inventory.lookupPart(search);
+        for(Part p:allParts) {
+            if(p.getName().contains(search) || (p.getPartId()+"").equals(search)) return p;
+        }
+        return null;
 	}
 
 	public Product lookupProduct (String search){
-		return inventory.lookupProduct(search);
+        boolean isFound = false;
+        for(Product p: products) {
+            if(p.getName().contains(search) || (p.getProductId()+"").equals(search)) return p;
+            isFound = true;
+        }
+        if(isFound == false) {
+            Product product = new Product(0, null, 0.0, 0, 0, 0, null);
+            return product;
+        }
+        return null;
 	}
 
 	public void updatePart(int partIndex, Part part){
-		inventory.updatePart(partIndex, part);
+        allParts.set(partIndex, part);
 		writeAll();
 	}
 
 	public void updateProduct(int productIndex, Product product){
-		inventory.updateProduct(productIndex, product);
+        products.set(productIndex, product);
 		writeAll();
 	}
 
 	public void deletePart(Part part){
-		inventory.deletePart(part);
+        allParts.remove(part);
 		writeAll();
 	}
 	public void deleteProduct(Product product){
-		inventory.removeProduct(product);
+        products.remove(product);
 		writeAll();
-	}
-
-	public Inventory getInventory(){
-		return inventory;
-	}
-
-	public void setInventory(Inventory inventory){
-		this.inventory=inventory;
 	}
 }
