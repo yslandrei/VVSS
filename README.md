@@ -1,5 +1,5 @@
 # VVSS
 
-1.Alexia Ilaria Cojan
-2.Chiper Roberto-Marian
-3.Diaconescu-Armasescu Andrei-Mihai
+- Alexia Ilaria Cojan
+- Chiper Roberto-Marian
+- Diaconescu-Armasescu Andrei-Mihai
