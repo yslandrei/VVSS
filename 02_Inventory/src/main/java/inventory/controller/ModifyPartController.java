@@ -184,7 +184,13 @@ public class ModifyPartController implements Initializable, Controller {
         errorMessage = "";
         
         try {
-            errorMessage = Part.isValidPart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), errorMessage);
+            if(isOutsourced == true) {
+                errorMessage = OutsourcedPart.isValidPart(name, Double.parseDouble(price), Integer.parseInt(inStock),
+                    Integer.parseInt(min), Integer.parseInt(max), partDynamicValue, errorMessage);
+            } else {
+                errorMessage = InhousePart.isValidPart(name, Double.parseDouble(price), Integer.parseInt(inStock),
+                    Integer.parseInt(min), Integer.parseInt(max), Integer.parseInt(partDynamicValue), errorMessage);
+            }
             if(errorMessage.length() > 0) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Error Adding Part!");
