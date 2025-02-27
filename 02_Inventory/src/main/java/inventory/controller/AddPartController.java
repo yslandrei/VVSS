@@ -1,5 +1,7 @@
 package inventory.controller;
 
+import inventory.model.InhousePart;
+import inventory.model.OutsourcedPart;
 import inventory.model.Part;
 import inventory.service.InventoryService;
 import javafx.event.ActionEvent;
@@ -152,7 +154,13 @@ public class AddPartController implements Initializable, Controller {
         errorMessage = "";
         
         try {
-            errorMessage = Part.isValidPart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), errorMessage);
+            if(isOutsourced == true) {
+                errorMessage = OutsourcedPart.isValidPart(name, Double.parseDouble(price), Integer.parseInt(inStock),
+                    Integer.parseInt(min), Integer.parseInt(max), partDynamicValue, errorMessage);
+            } else {
+                errorMessage = InhousePart.isValidPart(name, Double.parseDouble(price), Integer.parseInt(inStock),
+                    Integer.parseInt(min), Integer.parseInt(max), Integer.parseInt(partDynamicValue), errorMessage);
+            }
             if(errorMessage.length() > 0) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Error Adding Part!");
@@ -169,11 +177,11 @@ public class AddPartController implements Initializable, Controller {
             }
             
         } catch (NumberFormatException e) {
-            System.out.println("Form contains blank field.");
+            System.out.println("Form contains blank field or incorrect data types for fields.");
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Error Adding Part!");
             alert.setHeaderText("Error!");
-            alert.setContentText("Form contains blank field.");
+            alert.setContentText("Form contains blank field or incorrect data types for fields.");
             alert.showAndWait();
         }
     }
