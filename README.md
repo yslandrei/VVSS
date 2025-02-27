@@ -1,5 +1,5 @@
 # VVSS
 
-- Alexia Ilaria Cojan
-- Chiper Roberto-Marian
-- Diaconescu-Armasescu Andrei-Mihai
+- Alexia Ilaria Cojan (232)
+- Chiper Roberto-Marian (232)
+- Diaconescu-Armasescu Andrei-Mihai (233)
