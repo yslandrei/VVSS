@@ -33,6 +33,7 @@ public class InventoryRepositoryTest {
 
     @Test
     public void getAll() {
+        tearDown();
         assertEquals(0, repository.getAllParts().size());
     }
 

@@ -145,22 +145,22 @@
           <target>11</target>
         </configuration>
       </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.1</version>
-        <configuration>
-<!--          <includes>-->
-<!--            <include>**/*Test.java</include>-->
-<!--          </includes>-->
-<!--          <forkCount>1C</forkCount>-->
-<!--          <reuseForks>true</reuseForks>-->
-<!--          <argLine>-Xmx1024m</argLine>-->
-          <argLine>--add-opens inventory/whiteblack=ALL-UNNAMED</argLine>
-          <argLine>--add-opens inventory/integration/step1=ALL-UNNAMED</argLine>
-          <argLine>--add-opens inventory/integration/step2=ALL-UNNAMED</argLine>
-          <argLine>--add-opens inventory/integration/step3=ALL-UNNAMED</argLine>
-        </configuration>
-      </plugin>
+<!--      <plugin>-->
+<!--        <artifactId>maven-surefire-plugin</artifactId>-->
+<!--        <version>2.22.1</version>-->
+<!--        <configuration>-->
+<!--&lt;!&ndash;          <includes>&ndash;&gt;-->
+<!--&lt;!&ndash;            <include>**/*Test.java</include>&ndash;&gt;-->
+<!--&lt;!&ndash;          </includes>&ndash;&gt;-->
+<!--&lt;!&ndash;          <forkCount>1C</forkCount>&ndash;&gt;-->
+<!--&lt;!&ndash;          <reuseForks>true</reuseForks>&ndash;&gt;-->
+<!--&lt;!&ndash;          <argLine>-Xmx1024m</argLine>&ndash;&gt;-->
+<!--          <argLine>&#45;&#45;add-opens inventory/whiteblack=ALL-UNNAMED</argLine>-->
+<!--          <argLine>&#45;&#45;add-opens inventory/integration/step1=ALL-UNNAMED</argLine>-->
+<!--          <argLine>&#45;&#45;add-opens inventory/integration/step2=ALL-UNNAMED</argLine>-->
+<!--          <argLine>&#45;&#45;add-opens inventory/integration/step3=ALL-UNNAMED</argLine>-->
+<!--        </configuration>-->
+<!--      </plugin>-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
