@@ -40,6 +40,7 @@ public class InventoryServiceTest {
 
     @Test
     void addPart() {
+        tearDown();
         InhousePart part = new InhousePart(1, "Part999", 99, 15, 5, 25, 1);
         service.addInhousePart(part.getName(), part.getPrice(), part.getInStock(), part.getMin(), part.getMax(), part.getMachineId());
         List<Part> result = service.getAllParts();
